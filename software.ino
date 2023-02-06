@@ -1,4 +1,3 @@
-#include<ArduinoSTL.h>
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
  int senddata=1;
@@ -27,6 +26,7 @@ int index = 25; // no of actuators at the trejectory array
 #define index 16 // no of actuators at the trejectory array
 #define PITCH  1 
 #define START_THREAD  4
+#define maximum_linear_distance 500 // length of lead screw 
 int L= PITCH * START_THREAD ;// thread lead which mean one screw revolution equal to 8 mmm linear distance  but for 2 microstep mode we get 4 mm linear distance for one revolution
 float speedDelay = 500; // delay time in microsecond between each pulse
 const int stepPin1 = 3; 
@@ -195,7 +195,7 @@ Serial1.begin(9600);
 }
 float stepsanddirectioncalculator(float x,float y,int dirPin){ /* fuction calculates required revolutions for each motor and direction shouid takes>>> takes stepper[i]pos ,  
   stepper[i]ppos and stepper direction pin  returns Rno[i] and gives stepper direction pin high or low */
-         if(x<=500){
+         if(x<=maximum_linear_distance){
       if (y >= x) {      // If previous position is bigger then current position
         float lineardistance=y-x;
         // note that one revolution for screw equal 8 mm linear distance of stepper
@@ -213,14 +213,14 @@ float stepsanddirectioncalculator(float x,float y,int dirPin){ /* fuction calcul
         return Rno;
       } 
       }
-        else if (x>500){
+        else if (x>maximum_linear_distance){
        // Serial.println("actuator1 Distance is out of permitted range");
         float Rno=0;
          return Rno;
       }
       }
  float stepscalculator(float x,float y){ // fuction calculates required revolutions for each motor takes stepper[i]pos and  stepper[i]ppos and returns Rno[i]
-         if(x<=500){
+         if(x<=maximum_linear_distance){
       if (y >= x) {      // If previous position is bigger then current position
         float lineardistance=y-x;
         // note that one revolution for screw equal 8 mm linear distance of stepper
